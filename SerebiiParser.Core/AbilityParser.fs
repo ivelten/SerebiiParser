@@ -14,3 +14,14 @@ module AbilityParser =
                 s.TryGetAttribute("name")
                     |> Option.map (fun n -> n.Value())
                         = Some "SelectURL")
+
+    let abilitiyUrls =
+        abilityCombos
+            |> Seq.collect (fun c ->
+                c.Descendants("option"))
+            |> Seq.map (fun i ->
+                i.Attribute("value").Value())
+            |> Seq.filter (fun i ->
+                i <> "index.shtml")
+            |> Seq.map (fun i ->
+                i.Replace("/abilitydex/", ""))
