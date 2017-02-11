@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Ability.fs" />
+    <Compile Include="AbilityParser.fs" />
     <Compile Include="PokemonType.fs" />
     <Compile Include="Pokemon.fs" />
     <Compile Include="PokemonParser.fs" />
