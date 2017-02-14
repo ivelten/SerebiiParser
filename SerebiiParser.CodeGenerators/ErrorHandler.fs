@@ -8,7 +8,7 @@ module ErrorHandler =
     let private addError msg url (list : ErrorDictionary) = list.[msg].Add url
     
     let private createErrorListWithOneError url =
-        let list = new List<string>()
+        let list = List<string>()
         list.Add url
         list
 
