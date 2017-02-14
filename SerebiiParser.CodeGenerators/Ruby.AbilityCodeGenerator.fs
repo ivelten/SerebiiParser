@@ -6,12 +6,13 @@ open System.IO
 open System.Collections.Generic
 open System.Threading.Tasks
 open System.Text
-open SerebiiParser.CodeGenerators.ErrorHandling
+open SerebiiParser.CodeGenerators
+open SerebiiParser.CodeGenerators.Collections
 
 module AbilityCodeGenerator =
     let generateDbSeedsFromSerebii dir =
         let errors = ErrorDictionary()
-        let abilities = List<Ability>()
+        let abilities = AbilityList()
 
         let storeAbility a =
             printfn "Parsed:\n%A\n" a

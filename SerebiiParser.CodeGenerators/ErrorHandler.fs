@@ -1,9 +1,8 @@
-﻿namespace SerebiiParser.CodeGenerators.ErrorHandling
+﻿namespace SerebiiParser.CodeGenerators
 
 open System.Collections.Generic
 open System.IO
-
-type ErrorDictionary = Dictionary<string, List<string>>
+open SerebiiParser.CodeGenerators.Collections
 
 module ErrorHandler =
     let private addError msg url (list : ErrorDictionary) = list.[msg].Add url
