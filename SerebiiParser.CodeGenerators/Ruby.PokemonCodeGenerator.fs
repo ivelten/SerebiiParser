@@ -34,7 +34,7 @@ module PokemonCodeGenerator =
                 let min = chunk |> List.map (fun i -> i.number) |> List.min |> threeDigitsNumber
                 let max = chunk |> List.map (fun i -> i.number) |> List.max |> threeDigitsNumber
                 let fname = Path.Combine(dir, sprintf "%s_%s_pokemons.rb" min max)
-                let file = File.CreateText fname
+                use file = File.CreateText fname
                 let sb = StringBuilder()
 
                 for p in chunk do
@@ -92,8 +92,6 @@ module PokemonCodeGenerator =
 
                 let text = sb.ToString()
                 text.Substring(0, text.Length - 1) |> file.Write
-                file.Close()
-                file.Dispose()
 
         if pokemons.Count > 0
         then

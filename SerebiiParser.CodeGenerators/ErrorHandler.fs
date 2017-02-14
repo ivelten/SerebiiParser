@@ -18,11 +18,9 @@ module ErrorHandler =
         else list.Add(msg, createErrorListWithOneError url)
 
     let saveErrors dir (list : ErrorDictionary) =
-        let file = Path.Combine(dir, "Errors.log") |> File.CreateText
+        use file = Path.Combine(dir, "Errors.log") |> File.CreateText
         for entry in list do
             sprintf "Error: %s\r\nPages:\r\n" entry.Key |> file.Write
             for uri in entry.Value do 
                 sprintf "%s\r\n" uri |> file.Write
             file.Write "\r\n\r\n"
-        file.Close()
-        file.Dispose()
