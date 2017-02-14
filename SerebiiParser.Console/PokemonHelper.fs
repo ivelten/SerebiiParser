@@ -8,45 +8,24 @@ open System.Collections.Generic
 open System.Threading.Tasks
 open System.Globalization
 open System.Text
+open ErrorHelper
 
 let parseSerebiiPokemons dir =
-    let errors = new Dictionary<string, List<string>>()
-    
-    let addError msg uri = errors.[msg].Add uri
-    let createErrorListWithOneError uri =
-        let list = new List<string>()
-        list.Add uri
-        list
-
-    let treatError msg uri =
-        if errors.ContainsKey msg
-        then addError msg uri
-        else errors.Add(msg, createErrorListWithOneError uri)
-
-    let saveErrors() =
-        let file = Path.Combine(dir, "Errors.log") |> File.CreateText
-        for entry in errors do
-            sprintf "Error: %s\r\nPages:\r\n" entry.Key |> file.Write
-            for uri in entry.Value do 
-                sprintf "%s\r\n" uri |> file.Write
-            file.Write "\r\n\r\n"
-        file.Close()
-        file.Dispose()
-
-    let pokemons = new List<Pokemon>()
+    let errors = ErrorDictionary()
+    let pokemons = List<Pokemon>()
 
     let storePokemon p =
         printfn "Parsed:\n%A\n" p
-        pokemons.Add(p)
+        pokemons.Add p
 
     Parallel.ForEach([1..802], (fun i -> 
         try 
             parsePokemon i |> storePokemon
         with 
-            | _ as ex -> pokemonUrl i |> treatError ex.Message)) |> ignore
+            | _ as ex -> treatError ex.Message (pokemonUrl i) errors)) |> ignore
 
-    let savePokemons(plist:List<Pokemon>) =
-        let sorted = plist |> List.ofSeq |> List.sortBy (fun p -> p.number)
+    let savePokemons (list : IEnumerable<Pokemon>) =
+        let sorted = list |> List.ofSeq |> List.sortBy (fun p -> p.number)
         let chunks = sorted |> List.chunkBySize 20
 
         for chunk in chunks do
@@ -83,7 +62,7 @@ let parseSerebiiPokemons dir =
                         |Some a -> sprintf "\n  hidden_ability: Ability.find_by(name: '%s')," a
                         |None -> ""
 
-                (sprintf @"Pokemon.create!(
+                let code = (sprintf @"Pokemon.create!(
   id: %i,
   name: '%s',
   classification: '%s',
@@ -105,7 +84,9 @@ let parseSerebiiPokemons dir =
 
 " p.number p.name p.classification p.height p.weight p.captureRate p.baseEggSteps maleGenderRatio
     experienceGrowth p.baseHappiness p.hp p.attack p.defense 
-        p.spAttack p.spDefense p.speed p.type1 type2 p.ability1 ability2 hiddenAbility) |> sb.Append |> ignore
+        p.spAttack p.spDefense p.speed p.type1 type2 p.ability1 ability2 hiddenAbility)
+            
+            code |> sb.Append |> ignore
 
             let text = sb.ToString()
             text.Substring(0, text.Length - 1) |> file.Write
@@ -115,11 +96,13 @@ let parseSerebiiPokemons dir =
     if pokemons.Count > 0
     then
         printfn "Saving Pokémon..."
-        savePokemons(pokemons)
-    else printfn "No Pokémon parsed."
+        savePokemons pokemons
+    else 
+        printfn "No Pokémon parsed."
 
     if errors.Count > 0
     then 
         printfn "Saving errors..."
-        saveErrors()
-    else printfn "No errors found. Perfect parsing!"
+        saveErrors dir errors
+    else 
+        printfn "No errors found. Perfect parsing!"

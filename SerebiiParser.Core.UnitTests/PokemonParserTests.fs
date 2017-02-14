@@ -7,7 +7,6 @@ module PokemonParserTests =
     
     [<Fact>]
     let ``Should parse Charizard from Serebii``() =
-        
         let expected = 
            {number = 6;
             name = "Charizard";
@@ -37,7 +36,6 @@ module PokemonParserTests =
 
     [<Fact>]
     let ``Should parse Metapod from Serebii``() =
-        
         let expected = 
            {number = 11;
             name = "Metapod";
@@ -67,7 +65,6 @@ module PokemonParserTests =
 
     [<Fact>]
     let ``Should parse Rattata from Serebii``() =
-        
         let expected = 
            {number = 19;
             name = "Rattata";

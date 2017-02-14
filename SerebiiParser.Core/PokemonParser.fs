@@ -7,9 +7,9 @@ open System.Globalization
 module PokemonParser =
 
     let threeDigitsNumber n = n.ToString().PadLeft(3, '0')
-
     let pokemonUrl n = threeDigitsNumber n |> sprintf "http://serebii.net/pokedex-sm/%s.shtml"
-    let culture = CultureInfo.GetCultureInfo("en-US")
+    
+    let private culture = CultureInfo.GetCultureInfo("en-US")
 
     let parsePokemon n =
         let url = pokemonUrl n
@@ -185,7 +185,7 @@ module PokemonParser =
         let infoRow4 = extraInfoTable |> getRow 1
         let (ability1, ability2, hiddenAbility) = parsePokemonAbilities infoRow4
 
-        {number = n;
+        {number = n
          name = name
          classification = classification
          type1 = type1
