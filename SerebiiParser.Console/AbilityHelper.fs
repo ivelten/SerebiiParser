@@ -10,7 +10,6 @@ open System.Text
 
 let parseSerebiiAbilities dir =
     let errors = ErrorDictionary()
-    let abilityNames = AbilityParser.abilityNames
     let abilities = List<Ability>()
 
     let storeAbility a =

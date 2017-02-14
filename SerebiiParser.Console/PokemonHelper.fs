@@ -86,7 +86,7 @@ let parseSerebiiPokemons dir =
     experienceGrowth p.baseHappiness p.hp p.attack p.defense 
         p.spAttack p.spDefense p.speed p.type1 type2 p.ability1 ability2 hiddenAbility)
             
-            code |> sb.Append |> ignore
+                code |> sb.Append |> ignore
 
             let text = sb.ToString()
             text.Substring(0, text.Length - 1) |> file.Write
