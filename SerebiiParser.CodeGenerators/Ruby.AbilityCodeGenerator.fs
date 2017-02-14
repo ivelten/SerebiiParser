@@ -22,7 +22,7 @@ module AbilityCodeGenerator =
             try
                 parseAbility name |> storeAbility
             with
-                | _ as ex -> ErrorHandler.treatError ex.Message (abilityUrl name) errors)) |> ignore
+                | _ as ex -> abilityUrl name |> errors.Add ex.Message)) |> ignore
 
         let saveAbilities (list : IEnumerable<Ability>) =
             let sorted = list |> List.ofSeq |> List.sortBy (fun a -> a.name)
@@ -54,6 +54,6 @@ module AbilityCodeGenerator =
         if errors.Count > 0
         then
             printfn "Saving errors..."
-            ErrorHandler.saveErrors dir errors
+            Path.Combine(dir, "AbilityParsingErrors.log") |> errors.Save
         else
             printfn "No errors found. Perfect parsing!"

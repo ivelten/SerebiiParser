@@ -24,7 +24,7 @@ module PokemonCodeGenerator =
             try 
                 parsePokemon i |> storePokemon
             with 
-                | _ as ex -> ErrorHandler.treatError ex.Message (pokemonUrl i) errors)) |> ignore
+                | _ as ex -> pokemonUrl i |> errors.Add ex.Message)) |> ignore
 
         let savePokemons (list : IEnumerable<Pokemon>) =
             let sorted = list |> List.ofSeq |> List.sortBy (fun p -> p.number)
@@ -103,6 +103,6 @@ module PokemonCodeGenerator =
         if errors.Count > 0
         then 
             printfn "Saving errors..."
-            ErrorHandler.saveErrors dir errors
+            Path.Combine(dir, "PokemonParsingErrors.log") |> errors.Save
         else 
             printfn "No errors found. Perfect parsing!"
