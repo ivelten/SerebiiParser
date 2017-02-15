@@ -1,8 +1,7 @@
-﻿namespace SerebiiParser.CodeGenerators.Collections
+﻿namespace SerebiiParser.CodeGenerators
 
 open System.Collections.Generic
 open System.Text
-open SerebiiParser.Core
 open System.IO
 
 type ErrorLog() =
@@ -28,6 +27,3 @@ type ErrorLog() =
             for uri in entry.Value do 
                 sprintf "%s\r\n" uri |> file.Write
             file.Write "\r\n\r\n"
-
-type PokemonList = List<Pokemon>
-type AbilityList = List<Ability>

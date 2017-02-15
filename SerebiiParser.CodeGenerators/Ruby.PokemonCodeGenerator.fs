@@ -9,12 +9,11 @@ open System.Threading.Tasks
 open System.Globalization
 open System.Text
 open SerebiiParser.CodeGenerators
-open SerebiiParser.CodeGenerators.Collections
 
 module PokemonCodeGenerator =
     let generateDbSeedsFromSerebii dir =
         let errors = ErrorLog()
-        let pokemons = PokemonList()
+        let pokemons = List<Pokemon>()
 
         let storePokemon p =
             printfn "Parsed:\n%A\n" p
