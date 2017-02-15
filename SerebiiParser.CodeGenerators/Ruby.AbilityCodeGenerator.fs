@@ -11,7 +11,7 @@ open SerebiiParser.CodeGenerators.Collections
 
 module AbilityCodeGenerator =
     let generateDbSeedsFromSerebii dir =
-        let errors = ErrorDictionary()
+        let errors = ErrorLog()
         let abilities = AbilityList()
 
         let storeAbility a =

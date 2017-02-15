@@ -13,7 +13,7 @@ open SerebiiParser.CodeGenerators.Collections
 
 module PokemonCodeGenerator =
     let generateDbSeedsFromSerebii dir =
-        let errors = ErrorDictionary()
+        let errors = ErrorLog()
         let pokemons = PokemonList()
 
         let storePokemon p =

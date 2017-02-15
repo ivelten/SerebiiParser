@@ -5,8 +5,8 @@ open System.Text
 open SerebiiParser.Core
 open System.IO
 
-type ErrorDictionary() =
-    let dict : Dictionary<string, List<string>> = Dictionary<string, List<string>>()
+type ErrorLog() =
+    let dict = Dictionary<string, List<string>>()
     member private x.AddNewError msg url =
         let list = List<string>()
         list.Add url
