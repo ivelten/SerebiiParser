@@ -53,16 +53,21 @@ module PokemonCodeGenerator =
 
                     let experienceGrowth = p.experienceGrowth.ToString("N0", format)
 
+                    let ability1 = p.ability1.Replace("'", @"\'")
+
                     let ability2 =
                         match p.ability2 with
-                            |Some a -> sprintf "\n  ability_2: Ability.find_by(name: '%s')," a
+                            |Some a -> sprintf "\n  ability_2: Ability.find_by(name: '%s')," (a.Replace("'", @"\'"))
                             |None -> ""
 
                     let hiddenAbility =
                         match p.hiddenAbility with
-                            |Some a -> sprintf "\n  hidden_ability: Ability.find_by(name: '%s')," a
+                            |Some a -> sprintf "\n  hidden_ability: Ability.find_by(name: '%s')," (a.Replace("'", @"\'"))
                             |None -> ""
 
+                    let name = p.name.Replace("'", @"\'")
+                    let classification = p.classification.Replace("'", @"\'")
+                    
                     let code = (sprintf @"Pokemon.create!(
   id: %i,
   name: '%s',
@@ -83,14 +88,14 @@ module PokemonCodeGenerator =
   ability_1: Ability.find_by(name: '%s'),%s%s
 )
 
-" p.number p.name p.classification p.height p.weight p.captureRate p.baseEggSteps maleGenderRatio
+" p.number name classification p.height p.weight p.captureRate p.baseEggSteps maleGenderRatio
         experienceGrowth p.baseHappiness p.hp p.attack p.defense 
-            p.spAttack p.spDefense p.speed p.type1 type2 p.ability1 ability2 hiddenAbility)
+            p.spAttack p.spDefense p.speed p.type1 type2 ability1 ability2 hiddenAbility)
             
                     code |> sb.Append |> ignore
 
                 let text = sb.ToString()
-                text.Substring(0, text.Length - 1) |> file.Write
+                text.Substring(0, text.Length - 1).Replace("\r", "") |> file.Write
 
         if pokemons.Count > 0
         then

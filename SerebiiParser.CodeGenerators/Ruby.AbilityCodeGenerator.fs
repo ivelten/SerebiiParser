@@ -32,16 +32,20 @@ module AbilityCodeGenerator =
                 let sb = StringBuilder()
                 use file = File.CreateText fname
                 for a in items do
+                    let name = a.name.Replace("'", @"\'")
+                    let description = a.description.Replace("'", @"\'")
+                    let effect = a.effect.Replace("'", @"\'")
                     let code = (sprintf @"Ability.create!(
   name: '%s',
   description: '%s',
   effect: '%s'
 )
 
-" a.name a.description a.effect)
+" name description effect)
                     code |> sb.Append |> ignore
-                    let text = sb.ToString()
-                    text.Substring(0, text.Length - 1) |> file.Write
+
+                let text = sb.ToString()
+                text.Substring(0, text.Length - 1).Replace("\r", "") |> file.Write
             
         if abilities.Count > 0
         then

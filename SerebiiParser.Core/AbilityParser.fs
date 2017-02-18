@@ -48,21 +48,19 @@ module AbilityParser =
         let abilityRows =
             abilityTable.Descendants("tr", false)
 
-        let name = 
+        let description =
             let row = abilityRows |> Seq.item 1
             let cell = row.Descendants("td", false) |> Seq.item 0
             cell.InnerText()
 
-        let description =
-            let row = abilityRows |> Seq.item 3
-            let cell = row.Descendants("td", false) |> Seq.item 0
-            cell.InnerText()
+        let newName = description.ToLowerInvariant().Replace(" ", "_").Replace("'", "")
 
         let effect =
-            let row = abilityRows |> Seq.item 5
+            let index = abilityRows |> Seq.findIndex (fun i -> i.InnerText() = "Game's Text:")
+            let row = abilityRows |> Seq.item (index + 1)
             let cell = row.Descendants("td", false) |> Seq.item 0
             cell.InnerText()
 
-        {name = name;
+        {name = newName;
         description = description;
         effect = effect}
